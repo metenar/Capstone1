@@ -13,7 +13,7 @@ Data will be sourced from the Financial Modeling Prep API and Exchange Rate API.
 ## Project Outline
 
 ### Database Schema
-![database schema]()
+![database schema](Stock_market_schema.png)
 ### Potential Issues with APIs
 There are lots of information that I have to show and also I have to implement graph as well 
 
