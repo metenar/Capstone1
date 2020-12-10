@@ -13,7 +13,7 @@ Data will be sourced from the Financial Modeling Prep API and Exchange Rate API.
 ## Project Outline
 
 ### Database Schema
-![database schema](Stock_market_schema.png)
+![database schema](Stock schema.png)
 ### Potential Issues with APIs
 There are lots of information that I have to show and also I have to implement graph as well 
 
@@ -26,8 +26,8 @@ Users will be able to create an account and log in, so passwords will need to be
 	* search for specific stock 
 	* view additional details about related search
 * registered users can:
-	*	 save their portfolio
-	*  get information acording thier portfolio
+	*  add stocks to favorites 
+	*  get information acording favorites stocks 
 
 ### User Flows
 #### All Users
@@ -36,9 +36,9 @@ Users will be able to create an account and log in, so passwords will need to be
 
 #### Registered Users
 * log in to their account
-* nav bar includes links to view their portfolio
-* add stocks,currencies and crypto currencies and amount to their portfolio
-* edit these portfolio
+* nav bar includes links to view their pages and favorite stocks
+* can add favorites while they view the stocks detail page
+* un favorite them 
 * can click the each stock to view detailed information about this stock 
 
 
