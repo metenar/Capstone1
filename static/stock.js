@@ -1,9 +1,10 @@
-const $incomeSheet=$('.income-statement-container')
-const $balanceSheet=$('.balance-sheet-container')
-const $cashFlow=$('.cash-flow-container')
-const $summary=$('.summary-container')
-const $financial=$('.financial-container')
-// const $summary=$('.summary-container')
+const $incomeSheet=$('.income-statement-container');
+const $balanceSheet=$('.balance-sheet-container');
+const $cashFlow=$('.cash-flow-container');
+const $summary=$('.summary-container');
+const $financial=$('.financial-container');
+const $analysis=$('.analysis-container');
+const $stockData=$('#stock-data');
 
 
 // company chart  
@@ -515,12 +516,97 @@ function generateCashFlowHTML(data){
   `
   return html
 }
+
+async function analysis(stock){
+  const resp=await axios.get(`https://financialmodelingprep.com/api/v3/rating/${stock}?apikey=${apikey}`);
+  const newData=generateAnalysisHTML(resp.data[0]);
+    $('#analysis-data').empty();
+    $("#analysis-data").append(newData);
+}
+function generateAnalysisHTML(data){
+  if(data.ratingScore<3){
+    let html=`
+  <h4 class='display-5 text-danger'>Rating Score: ${data.ratingScore}</h4>
+  <h2 class='display-1 text-danger'>${(data.ratingRecommendation).toUpperCase()}</h2>
+  `
+  return html
+  } else if(data.ratingScore===3){
+    let html=`
+  <h4 class='display-5 text-danger'>Rating Score: ${data.ratingScore}</h4>
+  <h2 class='display-1 text-danger'>${(data.atingRecommendation).toUpperCase()}</h2>
+  `
+  return html
+  } else {
+    let html=`
+  <h4 class='display-5 text-success'>Rating Score: ${data.ratingScore}</h4>
+  <h2 class='display-1 text-success'>${(data.ratingRecommendation).toUpperCase()}</h2>
+  `
+  return html
+  }
+  
+}
+
+async function stockData(stock){
+  const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/${stock}?apikey=${apikey}`);
+  const data=resp.data[0];
+  $('#stock-name').text(data.name);
+  // $stockData.empty();
+  // const newData=generateStockDataHTML(data);
+  // $stockData.append(newData);
+  
+  $('#stock-data-2').text(data.changesPercentage);
+  $('#stock-data-3').text(data.change);
+  if (data.change<0){
+    $('#stock-data').html(`${data.price} <svg width="1.2em" height="1.3em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+    </svg>`);
+    $('#stock-data-2').addClass('text-danger');
+    $('#stock-data-3').addClass('text-danger');
+  } else if (data.change>0){
+    $('#stock-data').html(`${data.price} <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="green" 
+  xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+  </svg>`);
+    $('#stock-data-2').addClass('text-success');
+    $('#stock-data-3').addClass('text-success');
+  } else{
+    $('#stock-data').html(`${data.price}`);
+    $('#stock-data-2').addClass('text-secondary');
+    $('#stock-data-3').addClass('text-secondary');
+  }
+}
+
+// function generateAnalysisHTML(data){
+//   let html=`
+//   <div class="col ml-3"><svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="green" 
+//     xmlns="http://www.w3.org/2000/svg">
+//     <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+//     </svg>
+//     <div class="row" id='stock-data-2' style="font-size: 0.7rem;">${data.changesPercentage}</div>
+//     <div class="row" id='stock-data-3' style="font-size: 0.7rem;">${data.change}</div>
+//   </div>
+//   `
+
+// }
+ 
+  
+
+
+
+
 $("#summary").on('click', function () {
   hideElements();
-  summary(data)
+  summary(data);
   $('.summary-container').slideToggle();
 
+});
+$('#analysis').on('click', function(){
+  hideElements();
+  $analysis.slideToggle();
+  analysis(data);
+
 })
+
 
 $("#financial").on('click', function () {
   hideElements();
@@ -532,7 +618,7 @@ $("#financial").on('click', function () {
       $cashFlow.hide();
       $balanceSheet.slideToggle()
       financialBalanceSheet(data)
-  });
+  }); 
   $("#income-statement").on('click', () => {
     $cashFlow.hide();
     $balanceSheet.hide();
@@ -552,15 +638,56 @@ function hideElements(){
     $balanceSheet,
     $cashFlow,
     $summary,
-    $financial
+    $financial,
+    $analysis
   ];
   elementsArr.forEach($elem => $elem.hide());
 }
 
+
+async function popularsearch() {
+
+  const AAPLResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/AAPL?apikey=${apikey}`);
+  const AMZNResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/AMZN?apikey=${apikey}`);  
+  const JPMResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/JPM?apikey=${apikey}`);  
+  const TSLAResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/TSLA?apikey=${apikey}`);  
+  const STZResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/STZ?apikey=${apikey}`);  
+  const BAResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/BA?apikey=${apikey}`);  
+      newDataArray=[AAPLResp.data[0],AMZNResp.data[0],JPMResp.data[0],TSLAResp.data[0],
+      STZResp.data[0],BAResp.data[0]]
+  newData=generatePopularHTML(newDataArray);
+  for (let i=0;i<newData.length;i++){
+    $("#popular-search").append(newData[i]);
+      }
+  
+};
+
+function generatePopularHTML(a){
+let divArray=[];
+divArray.push(`<div class="col">Popular Search</div>`)
+for (let i=0;i<a.length;i++){
+  if (a[i].change<0){
+    let html=`<div class="col text-danger"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-danger">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+  </svg>${a[i].change}%</div>`
+    divArray.push(html);
+  } else {
+    let html=`<div class="col text-success"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-success">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="green" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+  </svg>${a[i].change}%</div>`
+    divArray.push(html)
+  }
+}
+return divArray;
+
+};
+
 const data=companyname;
 
-// companyChart(data) 
-summary(data)
+// companyChart(data)
+// popularsearch() 
+// summary(data)
+stockData(data)
 // financialIncomeStatement(data)
 // financialBalanceSheet(data)
 // financialCashFlow(data)

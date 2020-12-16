@@ -22,6 +22,8 @@ connect_db(app)
 
 @app.route('/')
 def show_homepage():
+    if g.user:
+        return redirect("/index")
     return render_template('homepage.html')
 
 @app.before_request
@@ -48,6 +50,9 @@ def do_logout():
 
 @app.route('/index')
 def show_index_page():
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
     return render_template('index.html')
 
 @app.route('/index',methods=['POST'])
@@ -107,17 +112,26 @@ def logout():
 
 @app.route('/<tick>')
 def stock_details(tick):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
     favorites=Favorites.query.filter_by(user_id=g.user.id).all()
     y=[fav.stock if fav.stock==tick else '' for fav in favorites]
     return render_template('stock_details.html',data=tick, fav=y)
 
 @app.route('/<tick>',methods=['POST'])
 def search_functionality_on_stock(tick):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
     tick=request.form['tick']
     return redirect(f'/{tick}')
 
 @app.route('/users/add_fav/<tick>',methods=['POST'])
 def add_fav_to_user(tick):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
     favorite=Favorites(stock=tick,user_id=g.user.id)
     db.session.add(favorite)
     db.session.commit()
@@ -125,7 +139,18 @@ def add_fav_to_user(tick):
 
 @app.route('/users/remove_fav/<tick>',methods=['POST'])
 def remove_fav_from_user(tick):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
     favorite=Favorites.query.filter_by(stock=tick).first()
     db.session.delete(favorite)
     db.session.commit()
     return redirect(f'/{tick}')
+
+@app.route('/users/<int:id>')
+def show_user_detail(id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    user=User.query.get_or_404(id)
+    return render_template('user_details.html',user=user)

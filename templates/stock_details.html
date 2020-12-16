@@ -7,9 +7,9 @@
     </div>
     <div class='row text-primary mt-5'>
         <div class="col-6">
-            <div class="row">
-                <div class="col">{{data}}</div>
-                <div class="col-4">
+            <div class="row ml-2">
+                <div class="col" id="stock-name"></div>
+                <div class="col-5">
                   {% if data in fav %}
                     <form method="POST" action="/users/remove_fav/{{data}}" id="fav-form">
                       <button class="btn btn-sm btn-primary">
@@ -36,7 +36,16 @@
                   </form>
                 </div>
             </div>
-            <div class="row">
+            <div class="row ml-3 text-secondary">
+              <div class="col ml-3" id='stock-data' style="font-size: 1.5rem;"></div>
+              <div class="col-9">
+                <div class="row" id='stock-data-2' style="font-size: 0.7rem;">deg</div>
+                <div class="row" id='stock-data-3' style="font-size: 0.7rem;">deg</div>
+              </div>
+            </div>
+
+
+            <div class="row mt-2">
               <div class="btn-group" role="group" aria-label="stock-buttons">
                 <button type="button" class="btn btn-primary" id='summary'>Summary</button>
                 <button type="button" class="btn btn-primary" id='financial'>Financial</button>
@@ -50,7 +59,7 @@
             </div>
         </div>
         <section class='col-5 summary-container'>
-          <div class="bg-secondary text-secondary mx-2" id='summary' style="font-size: 1.5rem; text-align: center;">Summary
+          <div class="bg-secondary text-secondary mx-2 p-2" style="font-size: 1.5rem; text-align: center;">Summary
             <table class="table table-hover table-secondary" style="text-align: left;">
               <tbody id='summary-data' style="font-size: 0.7rem;">
               
@@ -58,9 +67,9 @@
             </table>
           </div>
         </section>
-        <section class='col-5 financial-container bg-secondary text-secondary mx-2 hidden' style="font-size: 1.5rem; text-align: center;">Financial
+        <section class='col-5 financial-container bg-secondary text-secondary mx-2 hidden p-2' style="font-size: 1.5rem; text-align: center;">Financial
           <!-- <div class="" id='financial'>Financial -->
-            <div class="row">
+            <div class="row p-2">
               <div class="btn-group" role="group" aria-label="stock-buttons">
                 <button type="button" class="btn btn-outline-info btn-sm" id='income-statement'>Income Statement</button>
                 <button type="button" class="btn btn-outline-info btn-sm" id='balance-sheet'>Balance Sheet</button>
@@ -119,8 +128,13 @@
             </section>
           <!-- </div> -->
         </section>
-        <section class='analysis-container hidden'>
+        <section class='col-5 analysis-container hidden bg-secondary p-2' style="font-size: 1.5rem; text-align: center;">Analysis
+          <div class="row">
+            <div class="col mt-2" id='analysis-data'>
 
+            </div>
+          </div>
+          
         </section>
       </div>
   </div>

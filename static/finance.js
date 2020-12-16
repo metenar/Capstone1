@@ -421,7 +421,7 @@ async function loadData(){
 
 // loadData()
 
-loadArray=[losers(),gainers(),index(),cryptoCurrencies(),popularsearch(),currencies(),indexChart()]
+// loadArray=[losers(),gainers(),index(),cryptoCurrencies(),popularsearch(),currencies(),indexChart()]
 // losers();
 // gainers();
 // index();
@@ -439,4 +439,4 @@ async function loading(){
 
 }
 
-loading()
+// loading()
