@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid" id="box">
+    <div class='row text-info mt-3'id="popular-search">
+
+    </div>
+    <div class='row text-primary mt-5'>
+        <div class="col-6">
+            <div class="row">
+                <div class="col">{{data}}</div>
+                <div class="col-4">
+                  {% if data in fav %}
+                    <form method="POST" action="/users/remove_fav/{{data}}" id="fav-form">
+                      <button class="btn btn-sm btn-primary">
+                        <i class="fa fa-thumbs-up"></i> 
+                      </button>
+                    </form>
+                  {% else %}
+                    <form method="POST" action="/users/add_fav/{{data}}" id="fav-form">
+                        <button class="btn btn-sm btn-secondary">
+                          <i class="fa fa-thumbs-up"></i> 
+                        </button>
+                    </form>
+                  {% endif %}
+                </div>
+                
+                <div class="col box">
+                  <form action="/{{data}}" method='POST' class="form">
+                    <div class="input-group mb-3" id='input'>
+                      <input type="text" class="form-control" id='search' name='tick'>
+                      <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit"><span class="fa fa-search"></span></i></button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+            </div>
+            <div class="row">
+              <div class="btn-group" role="group" aria-label="stock-buttons">
+                <button type="button" class="btn btn-primary" id='summary'>Summary</button>
+                <button type="button" class="btn btn-primary" id='financial'>Financial</button>
+                <button type="button" class="btn btn-primary" id='analysis'>Analysis</button>
+              </div>
+            </div>
+
+            <div class="row">
+                <div class="col" id='myDiv'>
+                </div>
+            </div>
+        </div>
+        <section class='col-5 summary-container'>
+          <div class="bg-secondary text-secondary mx-2" id='summary' style="font-size: 1.5rem; text-align: center;">Summary
+            <table class="table table-hover table-secondary" style="text-align: left;">
+              <tbody id='summary-data' style="font-size: 0.7rem;">
+              
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class='col-5 financial-container bg-secondary text-secondary mx-2 hidden' style="font-size: 1.5rem; text-align: center;">Financial
+          <!-- <div class="" id='financial'>Financial -->
+            <div class="row">
+              <div class="btn-group" role="group" aria-label="stock-buttons">
+                <button type="button" class="btn btn-outline-info btn-sm" id='income-statement'>Income Statement</button>
+                <button type="button" class="btn btn-outline-info btn-sm" id='balance-sheet'>Balance Sheet</button>
+                <button type="button" class="btn btn-outline-info btn-sm" id='cash-flow'>Cash Flow</button>
+              </div>
+            </div>
+            <section class='income-statement-container hidden'>
+              <table class="table table-hover" style="text-align: left;">
+                <thead>
+                  <tr>
+                    <th scope='col'>Values in Millions (Except per Share Items)</th>
+                    <th scope="col">2017</th>
+                    <th scope="col">2018</th>
+                    <th scope="col">2019</th>
+                    <th scope="col">2020</th>
+                  </tr>
+                </thead>
+                <tbody id='financial-data' style="font-size: 0.7rem;">
+                  
+                </tbody>
+              </table>
+            </section>
+            <section class='balance-sheet-container hidden'>
+              <table class="table table-hover" style="text-align: left;">
+                <thead>
+                  <tr>
+                    <th scope='col'>Values in Millions</th>
+                    <th scope="col">2017</th>
+                    <th scope="col">2018</th>
+                    <th scope="col">2019</th>
+                    <th scope="col">2020</th>
+                  </tr>
+                </thead>
+                <tbody id='balance-sheet-data' style="font-size: 0.7rem;">
+
+                  
+                </tbody>
+              </table>
+            </section>
+            <section class='cash-flow-container hidden'>
+              <table class="table table-hover" style="text-align: left;">
+                <thead>
+                  <tr>
+                    <th scope='col'>Values in Millions</th>
+                    <th scope="col">2017</th>
+                    <th scope="col">2018</th>
+                    <th scope="col">2019</th>
+                    <th scope="col">2020</th>
+                  </tr>
+                </thead>
+                <tbody id='cash-flow-data' style="font-size: 0.7rem;">
+                  
+                  
+                </tbody>
+              </table>
+            </section>
+          <!-- </div> -->
+        </section>
+        <section class='analysis-container hidden'>
+
+        </section>
+      </div>
+  </div>
+
+    <script src="http://unpkg.com/jquery"></script>
+    <script src="http://unpkg.com/axios/dist/axios.js"></script>
+    <script type="text/javascript">
+        var companyname = '{{ data }}'
+    </script>
+    <script src="/static/stock.js"></script>
+
+{% endblock %}

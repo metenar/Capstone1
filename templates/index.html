@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <div class="container-fluid" id="box">
+    <div class='row text-info mt-3'id="popular-search">
+
+    </div>
+
+    <div class='row text-primary mt-5'>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-7">Market Summary</div>
+          <div class="col box">
+            <form action='/index' method="POST" class='form'>
+              <div class="input-group mb-3" id='input'>
+                <input type="text" class="form-control" id='search' name='tick'>
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit"><span class="fa fa-search"></span></i></button> 
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row mt-3" id='market-data'>
+          <div class="col">
+            <div class="row">
+              <div class="col-7 text-info" id='dow-data-1'>DOW</div>
+              <div class="col" id='dow-data-2' style="font-size: 0.7rem;"></div>
+            </div>
+            <div class="row">
+              <div class="col-7 text-secondary" id='dow-data-3' style="font-size: 1.1rem;"></div>
+              <div class="col" id='dow-data-4' style="font-size: 0.7rem;"></div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col-7 text-danger" id='nasdaq-data-1'>NASDAQ</div>
+              <div class="col" id='nasdaq-data-2' style="font-size: 0.7rem;"></div>
+            </div>
+            <div class="row">
+              <div class="col-7 text-secondary" id='nasdaq-data-3' style="font-size: 1.1rem;"></div>
+              <div class="col" id='nasdaq-data-4' style="font-size: 0.7rem;"></div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col-7 text-success" id='sp-data-1'>SP500</div>
+              <div class="col" id='sp-data-2' style="font-size: 0.7rem;"></div>
+            </div>
+            <div class="row">
+              <div class="col-7 text-secondary" id='sp-data-3' style="font-size: 1.1rem;"></div>
+              <div class="col" id='sp-data-4' style="font-size: 0.7rem;"></div>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="row">
+          <div class="col" id='myDiv'>
+          </div>
+        </div>
+        
+      </div>
+      <div class="col-3 bg-secondary text-secondary mx-2" id='gainers'>Gainers
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Tick</th>
+              <th scope="col">Price</th>
+            </tr>
+          </thead>
+          <tbody id='gainers-data' style="font-size: 0.7rem;">
+
+          </tbody>
+        </table>
+      </div>
+      <div class="col-3 bg-secondary text-secondary mx-2" id="loosers">Loosers
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Tick</th>
+              <th scope="col">Price</th>
+            </tr>
+          </thead>
+          <tbody id='losers-data' style="font-size: 0.7rem;">
+            
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="container mt-3" id='currency-box'>
+      <div class="row">
+        <div class="col bg-secondary m-2">
+          <div class="row ml-1">Currency</div>
+          <div class="row mt-2" id='currencies'>
+
+          </div>
+        </div>
+        <div class="col bg-secondary m-2">
+          <div class="row ml-1">Crypto Currency</div>
+          <div class="row mt-2" id="crypto">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="container" id='data'>
+
+    </div>
+
+{% endblock %}
