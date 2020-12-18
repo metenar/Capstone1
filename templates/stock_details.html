@@ -47,9 +47,9 @@
 
             <div class="row mt-2">
               <div class="btn-group" role="group" aria-label="stock-buttons">
-                <button type="button" class="btn btn-primary" id='summary'>Summary</button>
-                <button type="button" class="btn btn-primary" id='financial'>Financial</button>
-                <button type="button" class="btn btn-primary" id='analysis'>Analysis</button>
+                <button type="button" data-bs-toggle="button" class="btn btn-primary visited" aria-pressed="true" id='summary'>Summary</button>
+                <button type="button" data-bs-toggle="button" class="btn btn-primary" aria-pressed="false" id='financial'>Financial</button>
+                <button type="button" data-bs-toggle="button" class="btn btn-primary" aria-pressed="false" id='analysis'>Analysis</button>
               </div>
             </div>
 
@@ -59,7 +59,7 @@
             </div>
         </div>
         <section class='col-5 summary-container'>
-          <div class="bg-secondary text-secondary mx-2 p-2" style="font-size: 1.5rem; text-align: center;">Summary
+          <div class="bg-secondary text-secondary mt-2 mx-2 p-2" style="font-size: 1.5rem; text-align: center;">Summary
             <table class="table table-hover table-secondary" style="text-align: left;">
               <tbody id='summary-data' style="font-size: 0.7rem;">
               
@@ -67,11 +67,11 @@
             </table>
           </div>
         </section>
-        <section class='col-5 financial-container bg-secondary text-secondary mx-2 hidden p-2' style="font-size: 1.5rem; text-align: center;">Financial
+        <section class='col-5 financial-container bg-secondary text-secondary mt-2 ml-4 hidden p-2' style="font-size: 1.5rem; text-align: center;">Financial
           <!-- <div class="" id='financial'>Financial -->
             <div class="row p-2">
               <div class="btn-group" role="group" aria-label="stock-buttons">
-                <button type="button" class="btn btn-outline-info btn-sm" id='income-statement'>Income Statement</button>
+                <button type="button" class="btn btn-outline-info btn-sm visited" id='income-statement'>Income Statement</button>
                 <button type="button" class="btn btn-outline-info btn-sm" id='balance-sheet'>Balance Sheet</button>
                 <button type="button" class="btn btn-outline-info btn-sm" id='cash-flow'>Cash Flow</button>
               </div>
@@ -128,7 +128,7 @@
             </section>
           <!-- </div> -->
         </section>
-        <section class='col-5 analysis-container hidden bg-secondary p-2' style="font-size: 1.5rem; text-align: center;">Analysis
+        <section class='col-5 analysis-container hidden bg-secondary mt-2 ml-4 p-2' style="font-size: 1.5rem; text-align: center;">Analysis
           <div class="row">
             <div class="col mt-2" id='analysis-data'>
 
@@ -143,6 +143,7 @@
     <script src="http://unpkg.com/axios/dist/axios.js"></script>
     <script type="text/javascript">
         var companyname = '{{ data }}'
+        var fav='{{fav}}'
     </script>
     <script src="/static/stock.js"></script>
 

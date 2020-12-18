@@ -78,6 +78,14 @@ nav {
 #loosers {
     max-width: 330px;
 }
+#summary.visited,
+#analysis.visited,
+#financial.visited,
+#income-statement.visited,
+#balance-sheet.visited,
+#cash-flow.visited{
+    background: darkblue;
+}
 .logo {
     color: rgb(226,226,226);
     text-transform: uppercase;

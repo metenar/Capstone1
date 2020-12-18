@@ -35,30 +35,35 @@ class User(db.Model):
         db.Text,
         nullable=False,
     )
+
+    firstname = db.Column(
+        db.Text,
+        nullable=False
+    )
+    lastname=db.Column(
+        db.Text,
+        nullable=False
+    )
+    image_file = db.Column(
+        db.Text, 
+        nullable=False,
+        default='default.jpg')
+
     favorites = db.relationship(
         'Favorites',
-        backref="users"
+        backref="users", cascade='all,delete-orphan'
     )
 
-    
+    @property
+    def name(self):
+        return f'{self.firstname} {self.lastname}'
 
     @classmethod
-    def signup(cls, username, email, password):
-        """Sign up user.
-
-        Hashes password and adds user to system.
-        """
-        print(password)
-        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
-
-        user = User(
-            username=username,
-            email=email,
-            password=hashed_pwd,
-        )
-
-        db.session.add(user)
-        return user
+    def register(cls,username,pwd):
+        """Registiration class method"""
+        hashed=bcrypt.generate_password_hash(pwd)
+        hashed_utf8=hashed.decode('utf8')
+        return hashed_utf8
     
     @classmethod
     def authenticate(cls, username, password):

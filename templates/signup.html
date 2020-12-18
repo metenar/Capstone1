@@ -4,14 +4,22 @@
 <div class="row justify-content-md-center mt-5">
     <div class="col-md-7 col-lg-5">
       <h2 class="join-message">Join Stock Market App today.</h2>
-      <form method="POST" id="user_form">
+      <form method="POST" id="user_form" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
-  
         {% for field in form if field.widget.input_type != 'hidden' %}
+        <p>
+          {% if field.type == 'FileField' %}
+            {{ field.label }}
+            <br>
+            {{ field() }}
+          {% else %}
+            {{ field.label }}
+            {{ field(class_='form-control') }}
+          {% endif %}
           {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
+            <span class="form-text text-danger">{{ error }}</span>
           {% endfor %}
-          {{ field(placeholder=field.label.text, class="form-control") }}
+          </p>
         {% endfor %}
   
         <button class="btn btn-primary btn-lg btn-block">Sign me up!</button>

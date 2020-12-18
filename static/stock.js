@@ -576,31 +576,20 @@ async function stockData(stock){
   }
 }
 
-// function generateAnalysisHTML(data){
-//   let html=`
-//   <div class="col ml-3"><svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="green" 
-//     xmlns="http://www.w3.org/2000/svg">
-//     <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-//     </svg>
-//     <div class="row" id='stock-data-2' style="font-size: 0.7rem;">${data.changesPercentage}</div>
-//     <div class="row" id='stock-data-3' style="font-size: 0.7rem;">${data.change}</div>
-//   </div>
-//   `
-
-// }
- 
-  
-
-
-
 
 $("#summary").on('click', function () {
+  $("#summary").addClass('visited');
+  $("#analysis").removeClass('visited');
+  $("#financial").removeClass('visited');
   hideElements();
   summary(data);
   $('.summary-container').slideToggle();
 
 });
 $('#analysis').on('click', function(){
+  $("#analysis").addClass('visited');
+  $("#summary").removeClass('visited');
+  $("#financial").removeClass('visited');
   hideElements();
   $analysis.slideToggle();
   analysis(data);
@@ -609,27 +598,41 @@ $('#analysis').on('click', function(){
 
 
 $("#financial").on('click', function () {
+  $("#financial").addClass('visited');
+  $("#analysis").removeClass('visited');
+  $("#summary").removeClass('visited');
   hideElements();
   $financial.slideToggle();
   $incomeSheet.slideToggle();
-  financialIncomeStatement(data)
+  financialIncomeStatement(data);
+  
   $("#balance-sheet").on('click', () => {
+    $("#balance-sheet").addClass('visited');
+    $("#income-statement").removeClass('visited');
+    $("#cash-flow").removeClass('visited');
       $incomeSheet.hide();
       $cashFlow.hide();
-      $balanceSheet.slideToggle()
-      financialBalanceSheet(data)
+      $balanceSheet.slideToggle();
+      financialBalanceSheet(data);
+      $("#cash-flow").removeClass('visited');
   }); 
   $("#income-statement").on('click', () => {
+    $("#income-statement").addClass('visited');
+    $("#balance-sheet").removeClass('visited');
+    $("#cash-flow").removeClass('visited');
     $cashFlow.hide();
     $balanceSheet.hide();
-    $incomeSheet.slideToggle()
-    financialIncomeStatement(data)
+    $incomeSheet.slideToggle();
+    financialIncomeStatement(data);
   });
   $("#cash-flow").on('click', () => {
+    $("#cash-flow").addClass('visited');
+    $("#balance-sheet").removeClass('visited');
+    $("#income-statement").removeClass('visited');
     $incomeSheet.hide();
     $balanceSheet.hide();
-    $cashFlow.slideToggle()
-    financialCashFlow(data)
+    $cashFlow.slideToggle();
+    financialCashFlow(data);
   });
 })
 function hideElements(){
@@ -664,7 +667,7 @@ async function popularsearch() {
 
 function generatePopularHTML(a){
 let divArray=[];
-divArray.push(`<div class="col">Popular Search</div>`)
+divArray.push(`<div class="col" id='popular-fav-search'>Popular Search</div>`)
 for (let i=0;i<a.length;i++){
   if (a[i].change<0){
     let html=`<div class="col text-danger"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-danger">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
@@ -681,13 +684,47 @@ for (let i=0;i<a.length;i++){
 return divArray;
 
 };
+async function stockPriceData(stock){
+  const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/${stock}?apikey=${apikey}`);  
+  const data=resp.data[0]
+  return data;
+}
+
+async function favSearch(){
+  const stockArray=[];
+  const resp=await axios.get('http://127.0.0.1:5000/users/favorites');
+  const data=resp.data;
+  if (data.length>5){
+    for (let j=0;j<5;j++){
+      let d=await stockPriceData(data[j].stock);
+      stockArray.push(d);
+    } 
+  } else {
+    for (let j=0;j<data.length;j++){
+      let d=await stockPriceData(data[j].stock);
+      stockArray.push(d);
+    };
+  }
+  const newData=generatePopularHTML(stockArray);
+  for (let i=0;i<newData.length;i++){
+    $("#popular-search").append(newData[i]);
+  }
+  $('#popular-fav-search').text('Favorite Search');
+}
+
+const favorite=fav
+if (favorite.length>3){
+  favSearch();
+}else {
+  popularsearch();
+}
+
 
 const data=companyname;
-
 // companyChart(data)
 // popularsearch() 
 // summary(data)
-stockData(data)
+// stockData(data)
 // financialIncomeStatement(data)
 // financialBalanceSheet(data)
 // financialCashFlow(data)

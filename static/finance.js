@@ -268,7 +268,7 @@ $("#search-form").on("submit", async function handleSearch (evt) {
 
 function generatePopularHTML(a){
   let divArray=[];
-  divArray.push(`<div class="col">Popular Search</div>`)
+  divArray.push(`<div class="col" id='poular-fav-search'>Popular Search</div>`)
   for (let i=0;i<a.length;i++){
     if (a[i].change<0){
       let html=`<div class="col text-danger"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-danger">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
@@ -363,6 +363,7 @@ async function cryptoCurrencies(){
   async function index(){
     const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quotes/index?apikey=${apikey}`);
     const indexArray= resp.data.filter(company=>(company.symbol==='^DJI' || company.symbol==='^GSPC' || company.symbol==='^IXIC'));
+
     generateIndexHTML(indexArray);
   }
 
@@ -413,20 +414,47 @@ async function cryptoCurrencies(){
       }
     }  
   };
-console.log('mete nar');
+async function stockPriceData(stock){
+  const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/${stock}?apikey=${apikey}`);  
+  const data=resp.data[0]
+  return data;
+}
 
+async function favSearch(){
+  const stockArray=[];
+  const resp=await axios.get('http://127.0.0.1:5000/users/favorites');
+  const data=resp.data;
+  for (let j=0;j<data.length;j++){
+    let d=await stockPriceData(data[j].stock);
+    stockArray.push(d);
+  };
+  const newData=generatePopularHTML(stockArray);
+  for (let i=0;i<newData.length;i++){
+    $("#popular-search").append(newData[i]);
+  }
+  $('#poular-fav-search').text('Favorite Search');
+}
+
+console.log('mete nar');
 async function loadData(){
   Promise.all([losers(),gainers(),index(),cryptoCurrencies(),popularsearch(),currencies(),indexChart()])
 }
 
-// loadData()
+loadData();
+const favorite=fav;
+
+if(favorite.length>3){
+  favSearch();
+} else {
+  popularsearch();
+}
+
 
 // loadArray=[losers(),gainers(),index(),cryptoCurrencies(),popularsearch(),currencies(),indexChart()]
 // losers();
 // gainers();
 // index();
 // cryptoCurrencies();
-// popularsearch();
 // companyChart('AAPL');
 // currencies();
 // indexChart();

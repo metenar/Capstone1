@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-md-center">
+    <div class="col-md-4">
+      <h2 class="join-message">Edit Your Profile.</h2>
+      <form method="POST" id="user_form">
+        {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
+        {% if field.type == 'FileField' %}
+            {{ field.label }}
+        <br>
+            {{ field() }}
+        {% else %}
+            {{ field.label }}
+            {{ field(class_='form-control') }}
+        {% endif %}
+        
+        {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+        {% endfor %}
+        <div class="edit-btn-area">
+            <button class="btn btn-success mt-2">Edit this user!</button>
+            <a href="/users/{{ user.id }}" class="btn btn-outline-info">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+  {% endblock %}
