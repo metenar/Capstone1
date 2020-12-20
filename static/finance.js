@@ -21,64 +21,15 @@ navslide();
 const basehtml='https://financialmodelingprep.com/api/v3/quote/AAPL'
 const apikey='16e20ae424370441fbf7356a4e2857f1'
 const cryptoApiKey='1eab807a-a159-43eb-9108-ad769328354f'
-// company search
-async function searchCompany(query) {
+const popularSearchArray=[
+  {'stock':'AAPL'},
+  {'stock':'AMZN'},
+  {'stock':'JPM'},
+  {'stock':'TSLA'},
+  {'stock':'STZ'},
+  {'stock':'BA'}
+]
 
-    const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/${query}?apikey=${apikey}`);
-        newData=generateHTML(resp.data[0]);
-        $("#data").append(newData);
-    
-};
-function generateHTML(finance){
-    return `
-        <div class="col" >    
-            
-            <h5>Symbol: ${ finance.symbol }</h5>
-            <h5>Price :$${ finance.price}</h5>
-            <h5>Change: ${ finance.change}</h5>
-            <h5>Day Low: ${ finance.dayLow}</h5>
-            <h5>Day High: ${ finance.dayHigh}</h5>
-            <h5>Volume: ${ finance.volume}</h5>
-            <h5>Previous Close: ${ finance.previousClose}</h5>
-            
-        </div>
-    `
-}
-
-// company profile
-async function companyProfile(query){
-    const resp=await axios.get(`https://financialmodelingprep.com/api/v3/profile/${query}?apikey=${apikey}`)
-    newData=generateProfileHTML(resp.data[0]);
-    $("#data").append(newData);
-}
-function generateProfileHTML(finance){
-    return `
-        <div class="col" >    
-        <img src="${finance.image}"  class='border rounded p-1 img-fluid'>
-            <h5>Symbol: ${ finance.symbol }</h5>
-            <h5>Company Name: ${ finance.companyName }</h5>
-            <h5>Price :USD ${ finance.price }</h5>
-            <h5>Address: ${ finance.address}</h5>
-            <h5>CEO: ${ finance.ceo}</h5>
-            <p>Company Description: ${ finance.description}</p>
-            <h5>Industry: ${ finance.industry}</h5>
-            <h5>Web Site:<a href='${ finance.website}'>${finance.website}</a></h5>
-            
-        </div>
-    `
-}
-// search function
-$("#search-form").on("submit", async function handleSearch (evt) {
-    evt.preventDefault();
-  
-    let query = $("#search-query").val();
-    $("#search-query").val('');
-    if (!query) return;
-  
-    let data = await searchCompany(query);
-    
-    generateHTML(data[0]);
-  });
 // index graph
   async function indexChart(){
     const spResp=await axios.get(`https://financialmodelingprep.com/api/v3/historical-price-full/%5EGSPC?apikey=${apikey}`)
@@ -158,81 +109,6 @@ $("#search-form").on("submit", async function handleSearch (evt) {
   
   }
 
-
-// company chart  
-  async function companyChart(query){
-    const resp=await axios.get(`https://financialmodelingprep.com/api/v3/historical-price-full/${query}?apikey=${apikey}`)
-    let historical=resp.data.historical;
-    const date=historical.map(function(d){
-        return d.date;
-    });
-    const closed=historical.map(function(d){
-        return d.close;
-    });
-    const low=historical.map(function(d){
-        return d.low;
-    });
-    const high=historical.map(function(d){
-        return d.high;
-    });
-    
-    var trace1 = {
-        type: "scatter",
-        mode: "lines",
-        name:  `${resp.data.symbol} High`,
-        x: date,
-        y: high,
-        line: {color: '#17BECF'}
-      }
-      var trace2 = {
-        type: "scatter",
-        mode: "lines",
-        name: `${resp.data.symbol} Low`,
-        x: date,
-        y: low,
-        line: {color: '#7F7F7F'}
-      }
-      var trace3={
-        type: "scatter",
-        mode: "lines",
-        name: `${resp.data.symbol} closed`,
-        x: date,
-        y: closed,
-        line: {color: 'red'}
-      }
-    var data = [trace1,trace2,trace3];
-    var layout = {
-        title: `${resp.data.symbol} chart`,
-        xaxis: {
-          autorange: true,
-          range: [Math.min(date), Math.max(date)],
-          rangeselector: {buttons: [
-              {
-                count: 1,
-                label: '1m',
-                step: 'month',
-                stepmode: 'backward'
-              },
-              {
-                count: 6,
-                label: '6m',
-                step: 'month',
-                stepmode: 'backward'
-              },
-              {step: 'all'}
-            ]},
-          rangeslider: {range: [Math.min(date), Math.max(date)]},
-          type: 'date'
-        },
-        yaxis: {
-          autorange: true,
-          range: [Math.min(closed), Math.max(closed)],
-          type: 'linear'
-        }
-      };
-        
-      Plotly.newPlot('myDiv', data, layout);  
-  }
 // currency part
   async function currencies(){
       const resp=await axios.get('https://open.exchangerate-api.com/v6/latest');
@@ -249,36 +125,19 @@ $("#search-form").on("submit", async function handleSearch (evt) {
       `
   }
 
-  async function popularsearch() {
-
-    const AAPLResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/AAPL?apikey=${apikey}`);
-    const AMZNResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/AMZN?apikey=${apikey}`);  
-    const JPMResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/JPM?apikey=${apikey}`);  
-    const TSLAResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/TSLA?apikey=${apikey}`);  
-    const STZResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/STZ?apikey=${apikey}`);  
-    const BAResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/BA?apikey=${apikey}`);  
-        newDataArray=[AAPLResp.data[0],AMZNResp.data[0],JPMResp.data[0],TSLAResp.data[0],
-        STZResp.data[0],BAResp.data[0]]
-    newData=generatePopularHTML(newDataArray);
-    for (let i=0;i<newData.length;i++){
-      $("#popular-search").append(newData[i]);
-        }
-    
-};
-
 function generatePopularHTML(a){
   let divArray=[];
-  divArray.push(`<div class="col" id='poular-fav-search'>Popular Search</div>`)
+  divArray.push(`<div class="col" id='popular-fav-search'>Popular Search</div>`)
   for (let i=0;i<a.length;i++){
     if (a[i].change<0){
       let html=`<div class="col text-danger"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-danger">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
       <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-    </svg>${a[i].change}%</div>`
+    </svg>${a[i].changesPercentage}%</div>`
       divArray.push(html);
     } else {
       let html=`<div class="col text-success"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-success">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="green" xmlns="http://www.w3.org/2000/svg">
       <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-    </svg>${a[i].change}%</div>`
+    </svg>${a[i].changesPercentage}%</div>`
       divArray.push(html)
     }
   }
@@ -314,7 +173,8 @@ async function cryptoCurrencies(){
 
   async function gainers(){
     const resp=await axios.get(`https://financialmodelingprep.com/api/v3/gainers?apikey=${apikey}`);
-    const gainersArray=resp.data.filter((company,index)=>{if (index<7){return true}})
+    const sortedArray=resp.data.sort((a,b)=>b.changes-a.changes);
+    const gainersArray=sortedArray.filter((company,index)=>{if (index<7){return true}})
     gainersHTML=generateGainHTML(gainersArray);
     for (let i=0;i<gainersHTML.length;i++){
       $("#gainers-data").append(gainersHTML[i]);
@@ -323,7 +183,8 @@ async function cryptoCurrencies(){
 
   async function losers(){
     const resp=await axios.get(`https://financialmodelingprep.com/api/v3/losers?apikey=${apikey}`);
-    const losersArray=resp.data.filter((company,index)=>{if (index<7){return true}})
+    const sortedArray=resp.data.sort((a,b)=>a.changes-b.changes);
+    const losersArray=sortedArray.filter((company,index)=>{if (index<7){return true}})
     losersHTML=generateLossHTML(losersArray);
     for (let i=0;i<losersHTML.length;i++){
       $("#losers-data").append(losersHTML[i]);
@@ -414,57 +275,57 @@ async function cryptoCurrencies(){
       }
     }  
   };
-async function stockPriceData(stock){
+  async function stockPriceData(stock){
   const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/${stock}?apikey=${apikey}`);  
   const data=resp.data[0]
   return data;
-}
+  }
 
-async function favSearch(){
-  const stockArray=[];
+  async function popularSearch(){
+  let stockArray=[];
   const resp=await axios.get('http://127.0.0.1:5000/users/favorites');
   const data=resp.data;
-  for (let j=0;j<data.length;j++){
-    let d=await stockPriceData(data[j].stock);
-    stockArray.push(d);
-  };
-  const newData=generatePopularHTML(stockArray);
-  for (let i=0;i<newData.length;i++){
+  if (data.length===0){
+    for (let j=0;j<popularSearchArray.length;j++){
+      let d=await stockPriceData(popularSearchArray[j].stock);
+      stockArray.push(d);
+    }
+    const newData=generatePopularHTML(stockArray);
+    for (let i=0;i<newData.length;i++){
     $("#popular-search").append(newData[i]);
+    }
+  }else {
+    if (data.length>5){
+      for (let j=0;j<5;j++){
+        let d=await stockPriceData(data[j].stock);
+        stockArray.push(d);
+      } 
+    } else {
+      for (let j=0;j<data.length;j++){
+        let d=await stockPriceData(data[j].stock);
+        stockArray.push(d);
+      };
+    }
+    const newData=generatePopularHTML(stockArray);
+    for (let i=0;i<newData.length;i++){
+      $("#popular-search").append(newData[i]);
+    }
+    $('#popular-fav-search').text('Favorite Search');
   }
-  $('#poular-fav-search').text('Favorite Search');
-}
+  }
 
-console.log('mete nar');
-async function loadData(){
-  Promise.all([losers(),gainers(),index(),cryptoCurrencies(),popularsearch(),currencies(),indexChart()])
-}
+// console.log('mete nar');
+  async function loadData(){
+    Promise.all([index(),cryptoCurrencies(),popularSearch(),currencies(),indexChart(),losers(),gainers()])
+  }
 
-loadData();
-const favorite=fav;
-
-if(favorite.length>3){
-  favSearch();
-} else {
-  popularsearch();
-}
+// loadData();
+popularSearch()
 
 
-// loadArray=[losers(),gainers(),index(),cryptoCurrencies(),popularsearch(),currencies(),indexChart()]
 // losers();
 // gainers();
 // index();
 // cryptoCurrencies();
-// companyChart('AAPL');
 // currencies();
 // indexChart();
-
-
-async function loading(){
-  for (i=0;i<loadArray.length;i++){
-    setTimeout(loadArray[i],700);
-  }
-
-}
-
-// loading()

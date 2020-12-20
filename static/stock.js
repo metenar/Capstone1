@@ -5,7 +5,14 @@ const $summary=$('.summary-container');
 const $financial=$('.financial-container');
 const $analysis=$('.analysis-container');
 const $stockData=$('#stock-data');
-
+const popularSearchArray=[
+  {'stock':'AAPL'},
+  {'stock':'AMZN'},
+  {'stock':'JPM'},
+  {'stock':'TSLA'},
+  {'stock':'STZ'},
+  {'stock':'BA'}
+]
 
 // company chart  
 
@@ -549,12 +556,8 @@ function generateAnalysisHTML(data){
 async function stockData(stock){
   const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/${stock}?apikey=${apikey}`);
   const data=resp.data[0];
-  $('#stock-name').text(data.name);
-  // $stockData.empty();
-  // const newData=generateStockDataHTML(data);
-  // $stockData.append(newData);
-  
-  $('#stock-data-2').text(data.changesPercentage);
+  $('#stock-name').text(data.name); 
+  $('#stock-data-2').text(`${data.changesPercentage}%`);
   $('#stock-data-3').text(data.change);
   if (data.change<0){
     $('#stock-data').html(`${data.price} <svg width="1.2em" height="1.3em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
@@ -576,7 +579,66 @@ async function stockData(stock){
   }
 }
 
+function generatePopularHTML(a){
+  let divArray=[];
+  divArray.push(`<div class="col" id='popular-fav-search'>Popular Search</div>`)
+  for (let i=0;i<a.length;i++){
+    if (a[i].change<0){
+      let html=`<div class="col text-danger"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-danger">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+    </svg>${a[i].changesPercentage}%</div>`
+      divArray.push(html);
+    } else {
+      let html=`<div class="col text-success"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-success">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="green" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+    </svg>${a[i].changesPercentage}%</div>`
+      divArray.push(html)
+    }
+  }
+  return divArray;
+  
+  };
+async function stockPriceData(stock){
+  const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/${stock}?apikey=${apikey}`);  
+  const data=resp.data[0]
+  return data;
+}
+  
+async function popularSearch(){
+    let stockArray=[];
+    const resp=await axios.get('http://127.0.0.1:5000/users/favorites');
+    const data=resp.data;
+    if (data.length===0){
+      for (let j=0;j<popularSearchArray.length;j++){
+        let d=await stockPriceData(popularSearchArray[j].stock);
+        stockArray.push(d);
+      }
+      const newData=generatePopularHTML(stockArray);
+      for (let i=0;i<newData.length;i++){
+      $("#popular-search").append(newData[i]);
+      }
+    }else {
+      if (data.length>5){
+        for (let j=0;j<5;j++){
+          let d=await stockPriceData(data[j].stock);
+          stockArray.push(d);
+        } 
+      } else {
+        for (let j=0;j<data.length;j++){
+          let d=await stockPriceData(data[j].stock);
+          stockArray.push(d);
+        };
+      }
+      const newData=generatePopularHTML(stockArray);
+      for (let i=0;i<newData.length;i++){
+        $("#popular-search").append(newData[i]);
+      }
+      $('#popular-fav-search').text('Favorite Search');
+    }
+}
+  
 
+// Event listeners
 $("#summary").on('click', function () {
   $("#summary").addClass('visited');
   $("#analysis").removeClass('visited');
@@ -595,7 +657,6 @@ $('#analysis').on('click', function(){
   analysis(data);
 
 })
-
 
 $("#financial").on('click', function () {
   $("#financial").addClass('visited');
@@ -648,83 +709,13 @@ function hideElements(){
 }
 
 
-async function popularsearch() {
-
-  const AAPLResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/AAPL?apikey=${apikey}`);
-  const AMZNResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/AMZN?apikey=${apikey}`);  
-  const JPMResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/JPM?apikey=${apikey}`);  
-  const TSLAResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/TSLA?apikey=${apikey}`);  
-  const STZResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/STZ?apikey=${apikey}`);  
-  const BAResp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/BA?apikey=${apikey}`);  
-      newDataArray=[AAPLResp.data[0],AMZNResp.data[0],JPMResp.data[0],TSLAResp.data[0],
-      STZResp.data[0],BAResp.data[0]]
-  newData=generatePopularHTML(newDataArray);
-  for (let i=0;i<newData.length;i++){
-    $("#popular-search").append(newData[i]);
-      }
-  
-};
-
-function generatePopularHTML(a){
-let divArray=[];
-divArray.push(`<div class="col" id='popular-fav-search'>Popular Search</div>`)
-for (let i=0;i<a.length;i++){
-  if (a[i].change<0){
-    let html=`<div class="col text-danger"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-danger">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-  </svg>${a[i].change}%</div>`
-    divArray.push(html);
-  } else {
-    let html=`<div class="col text-success"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-success">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="green" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-  </svg>${a[i].change}%</div>`
-    divArray.push(html)
-  }
-}
-return divArray;
-
-};
-async function stockPriceData(stock){
-  const resp=await axios.get(`https://financialmodelingprep.com/api/v3/quote/${stock}?apikey=${apikey}`);  
-  const data=resp.data[0]
-  return data;
-}
-
-async function favSearch(){
-  const stockArray=[];
-  const resp=await axios.get('http://127.0.0.1:5000/users/favorites');
-  const data=resp.data;
-  if (data.length>5){
-    for (let j=0;j<5;j++){
-      let d=await stockPriceData(data[j].stock);
-      stockArray.push(d);
-    } 
-  } else {
-    for (let j=0;j<data.length;j++){
-      let d=await stockPriceData(data[j].stock);
-      stockArray.push(d);
-    };
-  }
-  const newData=generatePopularHTML(stockArray);
-  for (let i=0;i<newData.length;i++){
-    $("#popular-search").append(newData[i]);
-  }
-  $('#popular-fav-search').text('Favorite Search');
-}
-
-const favorite=fav
-if (favorite.length>3){
-  favSearch();
-}else {
-  popularsearch();
-}
+// popularSearch()
 
 
 const data=companyname;
 // companyChart(data)
-// popularsearch() 
 // summary(data)
-// stockData(data)
+stockData(data)
 // financialIncomeStatement(data)
 // financialBalanceSheet(data)
 // financialCashFlow(data)

@@ -78,6 +78,19 @@ nav {
 #loosers {
     max-width: 330px;
 }
+#dow{
+    
+    border-left:solid 1px darkturquoise;
+}
+
+#nasdaq{
+    border-left:solid 1px tomato;
+}
+
+#sp500{
+    border-left:solid 1px greenyellow;
+}
+
 #summary.visited,
 #analysis.visited,
 #financial.visited,

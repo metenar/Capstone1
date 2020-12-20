@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="row mt-3" id='market-data'>
-          <div class="col">
+          <div class="col" id='dow'>
             <div class="row">
               <div class="col-7 text-info" id='dow-data-1'>DOW</div>
               <div class="col" id='dow-data-2' style="font-size: 0.7rem;"></div>
@@ -32,7 +32,7 @@
               <div class="col" id='dow-data-4' style="font-size: 0.7rem;"></div>
             </div>
           </div>
-          <div class="col">
+          <div class="col" id='nasdaq'>
             <div class="row">
               <div class="col-7 text-danger" id='nasdaq-data-1'>NASDAQ</div>
               <div class="col" id='nasdaq-data-2' style="font-size: 0.7rem;"></div>
@@ -42,7 +42,7 @@
               <div class="col" id='nasdaq-data-4' style="font-size: 0.7rem;"></div>
             </div>
           </div>
-          <div class="col">
+          <div class="col" id='sp500'>
             <div class="row">
               <div class="col-7 text-success" id='sp-data-1'>SP500</div>
               <div class="col" id='sp-data-2' style="font-size: 0.7rem;"></div>
@@ -61,7 +61,7 @@
         </div>
         
       </div>
-      <div class="col-3 bg-secondary text-secondary mx-2" id='gainers'>Gainers
+      <div class="col-3 bg-secondary text-secondary mx-2 ml-3" id='gainers'>Gainers
         <table class="table table-hover">
           <thead>
             <tr>
@@ -113,9 +113,5 @@
     </div>
   <script src="http://unpkg.com/jquery"></script>
   <script src="http://unpkg.com/axios/dist/axios.js"></script>  
-  <script type="text/javascript">
-      
-      var fav='{{favorites}}'
-  </script>
-  <script src="/static/stock.js"></script>
+
 {% endblock %}

@@ -46,7 +46,6 @@ class User(db.Model):
     )
     image_file = db.Column(
         db.Text, 
-        nullable=False,
         default='default.jpg')
 
     favorites = db.relationship(
