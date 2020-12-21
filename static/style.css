@@ -28,31 +28,14 @@ nav {
 
 }
 
-/* .fa-search {
-    border-radius: 50%;
-} */
+  .summary-container{
+      margin-top: 100px;
+  }
 
-/* #search {
-    display: flex;
-    position: relative;
+  .analysis-container{
+      height: 200px;
+      margin-top: 150px;
   }
-#search.form-control {
-    border-radius: 20px;
-    margin-bottom: 0;
-    width: 100%;
-    font-size: 13px;
-    padding-right: 28px;
-    box-sizing: border-box;
-  }
-  #search.form-control + .btn {
-    position: absolute;
-    right: 9px;
-    top: 2px;
-    bottom: 4px;
-    z-index: 1;
-    padding: 0;
-    color: #66757f;
-  } */
 
 .btn {
     border-radius: 50px;

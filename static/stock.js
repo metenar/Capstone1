@@ -581,7 +581,7 @@ async function stockData(stock){
 
 function generatePopularHTML(a){
   let divArray=[];
-  divArray.push(`<div class="col" id='popular-fav-search'>Popular Search</div>`)
+  divArray.push(`<div class="col ml-3" id='popular-fav-search'>Popular Search</div>`)
   for (let i=0;i<a.length;i++){
     if (a[i].change<0){
       let html=`<div class="col text-danger"><a href="/${a[i].symbol}" style="text-decoration:none;" class="text-danger">${a[i].symbol}</a> <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
