@@ -10,3 +10,8 @@ Financial Modeling API has limit of requests which is 250 request by daily.
 
 ### Database Schema
 ![database schema](Stock_Schema.png)
+
+#### Technology Used:
+* Python
+* JavaScript
+* Bootstrap
