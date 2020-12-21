@@ -1,12 +1,11 @@
 
 from flask import Flask, render_template,session,g,flash,redirect, url_for,jsonify
 from flask.globals import request
-import requests
 import os
 import secrets
 from PIL import Image
 from models import db, connect_db, User, Favorites
-from forms import UserAddForm, LoginForm, ChangePasswordForm, UserEditForm
+from forms import UserAddForm, LoginForm, UserEditForm
 from sqlalchemy.exc import IntegrityError
 
 CURR_USER_KEY = "curr_user"
@@ -232,4 +231,18 @@ def user_favorites():
         f=serialize(fav.stock)
         favArray.append(f)
     return (jsonify(favArray),200)
-    
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
+@app.after_request
+def add_header(req):
+    """Add non-caching headers on every request."""
+
+    req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    req.headers["Pragma"] = "no-cache"
+    req.headers["Expires"] = "0"
+    req.headers['Cache-Control'] = 'public, max-age=0'
+    return req

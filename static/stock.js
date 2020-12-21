@@ -709,12 +709,12 @@ function hideElements(){
 }
 
 
-// popularSearch()
+popularSearch()
 
 
 const data=companyname;
-// companyChart(data)
-// summary(data)
+companyChart(data)
+summary(data)
 stockData(data)
 // financialIncomeStatement(data)
 // financialBalanceSheet(data)

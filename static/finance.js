@@ -319,8 +319,8 @@ async function cryptoCurrencies(){
     Promise.all([index(),cryptoCurrencies(),popularSearch(),currencies(),indexChart(),losers(),gainers()])
   }
 
-// loadData();
-popularSearch()
+loadData();
+// popularSearch()
 
 
 // losers();

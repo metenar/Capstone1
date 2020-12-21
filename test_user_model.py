@@ -41,17 +41,50 @@ class UserModelTestCase(TestCase):
 
         db.session.add(u)
         db.session.commit()
-
+        name=u.name
         self.assertEqual(len(u.favorites), 0)
+        self.assertEqual(name,'test test_lastname')
 
-    # def test_create_user(self):
-    #     """Does basic model work?"""
+    def test_create_user(self):
+        """Does basic model work?"""
 
-    #     u=User.signup("testuser7","test1@test.com","HASHED_PASSWORD",'https://randomuser.me/24.jpg')
-    #     try:
-    #         u1=User.signup("testuser7","test2@test.com","HASHED_PASSWORD",'https://randomuser.me/24.jpg')
-    #         db.session.commit()
-    #     except IntegrityError:
-    #         y='choose another username'
-    #     self.assertEqual(u.username,'testuser7')
-    #     self.assertEqual(y,'choose another username')
+        u=User(
+            username="testuser7",
+            email="test1@test.com",
+            password="HASHED_PASSWORD",
+            firstname='test',
+            lastname='test_lastname'
+            )
+        db.session.add(u)
+        try:
+            u1=User(
+                username="testuser7",
+                email="test2@test.com",
+                password="HASHED_PASSWORD",
+                firstname='test',
+                lastname='test_lastname')
+            db.session.add(u1)
+            db.session.commit()
+        except IntegrityError:
+            y='choose another username'
+        self.assertEqual(u.username,'testuser7')
+        self.assertEqual(y,'choose another username')
+    
+    def test_authenticate_user(self):
+        """Does basic model work?"""
+
+        username="testuser"
+        email="test@test.com"
+        password="HASHED_PASSWORD"
+        firstname='test'
+        lastname='test_lastname'
+        pwd=User.register(username,password)
+        u1=User(username=username,email=email,password=pwd,firstname=firstname,lastname=lastname)
+        db.session.add(u1)
+        db.session.commit()
+        u=User.authenticate('testuser',"HASHED_PASSWORD")
+        u2=User.authenticate('testuser2',"HASHED_PASSWORD")
+        u3=User.authenticate('testuser',"HASHED_PASSWORD1")
+        self.assertEqual(u.username,'testuser')
+        self.assertEqual(u2,False)
+        self.assertEqual(u3,False)
