@@ -12,10 +12,10 @@ CURR_USER_KEY = "curr_user"
 apikey='16e20ae424370441fbf7356a4e2857f1'
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///stock_market_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','postgresql:///stock_market_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY']='merhabamete'
+app.config['SECRET_KEY']=os.environ.get('SECRET_KEY','merhabamete')
 
 connect_db(app)
 
