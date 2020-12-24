@@ -243,6 +243,7 @@ async function financialBalanceSheet(stock){
     let data=resp.data[i];
     dataArray.push(data);
   }
+
   const newData=generateBalanceSheetHTML(dataArray);
   $("#balance-sheet-data").empty();
   $("#balance-sheet-data").append(newData);
@@ -606,7 +607,7 @@ async function stockPriceData(stock){
   
 async function popularSearch(){
     let stockArray=[];
-    const resp=await axios.get('http://127.0.0.1:5000/users/favorites');
+    const resp=await axios.get('/users/favorites');
     const data=resp.data;
     if (data.length===0){
       for (let j=0;j<popularSearchArray.length;j++){
@@ -675,7 +676,7 @@ $("#financial").on('click', function () {
       $cashFlow.hide();
       $balanceSheet.slideToggle();
       financialBalanceSheet(data);
-      $("#cash-flow").removeClass('visited');
+      // $("#cash-flow").removeClass('visited');
   }); 
   $("#income-statement").on('click', () => {
     $("#income-statement").addClass('visited');
@@ -716,7 +717,5 @@ const data=companyname;
 companyChart(data)
 summary(data)
 stockData(data)
-// financialIncomeStatement(data)
-// financialBalanceSheet(data)
-// financialCashFlow(data)
+
 

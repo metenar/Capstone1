@@ -283,7 +283,7 @@ async function cryptoCurrencies(){
 
   async function popularSearch(){
   let stockArray=[];
-  const resp=await axios.get('http://127.0.0.1:5000/users/favorites');
+  const resp=await axios.get('/users/favorites');
   const data=resp.data;
   if (data.length===0){
     for (let j=0;j<popularSearchArray.length;j++){
