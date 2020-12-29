@@ -7,6 +7,9 @@ from PIL import Image
 from models import db, connect_db, User, Favorites
 from forms import UserAddForm, LoginForm, UserEditForm
 from sqlalchemy.exc import IntegrityError
+from ticklist import sorted
+
+
 
 CURR_USER_KEY = "curr_user"
 apikey='16e20ae424370441fbf7356a4e2857f1'
@@ -74,7 +77,11 @@ def show_index_page():
 @app.route('/index',methods=['POST'])
 def search_functionality():
     tick=request.form['tick']
-    return redirect(f'/{tick}')
+    if tick in sorted:
+        return redirect(f'/{tick}')
+    else :
+        flash('Please enter correct tick', "danger")
+        return redirect ('/index')
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -147,7 +154,11 @@ def search_functionality_on_stock(tick):
         flash("Access unauthorized.", "danger")
         return redirect("/")
     tick=request.form['tick']
-    return redirect(f'/{tick}')
+    if tick in sorted:
+        return redirect(f'/{tick}')
+    else :
+        flash('Please enter correct tick', "danger")
+        return redirect ('/index')
 
 @app.route('/users/add_fav/<tick>',methods=['POST'])
 def add_fav_to_user(tick):
