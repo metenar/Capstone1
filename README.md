@@ -9,7 +9,7 @@ Data will be sourced from the Free version of Financial Modeling Prep API and Ex
 Financial Modeling API has limit of requests which is 250 request by daily. 
 
 ### Database Schema
-![database schema](https://github.com/metenar/Capstone1/tree/master/static/images/Stock_Schema.png)
+![database schema](https://github.com/metenar/Capstone1/master/static/images/Stock_Schema.png)
 
 ## Usage of App
 First of all you should register or login.
