@@ -11,6 +11,7 @@ Financial Modeling API has limit of requests which is 250 request by daily.
 ### Database Schema
 ![database schema](https://github.com/metenar/Capstone1/blob/master/static/images/Stock_Schema.png)
 
+
 ## Usage of App
 First of all you should register or login.
 
